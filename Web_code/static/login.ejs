@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link rel="stylesheet" href="login.css">
+    <title>Smart Mask</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">MY-MS</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+            <div class="navbar-nav  ">
+              <a class="nav-link active" aria-current="page" href="/home">Home</a>
+              <a class="nav-link d-flex" href="/register">Register</a>
+              <a class="nav-link d-flex" href="/login">Login</a>
+              <a class="nav-link d-flex" href="/smartMask">Info</a>
+            </div>
+          </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <form onsubmit="event.preventDefault()" class="box" id="login">
+                        <h1>Login</h1>
+                        <p class="text-muted"> Please enter your login ID and password!</p> <input type="text" id="username" placeholder="Username"> <input type="password" id="password" placeholder="Password"> <a class="forgot text-muted" href="/change-password">Forgot password?</a> <p style="color: beige;">Don't have an account ?<a class="forgot text-muted" href="/register" style="margin-left: 4px;">Register Here</a></p><input type="submit"  value="Login">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const form = document.querySelector('#login')
+    form.addEventListener('submit', login)
+
+    async function login(event) {
+        event.preventDefault()
+
+        const username = document.querySelector('#username').value
+        const password = document.querySelector('#password').value
+
+        const result = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/JSON'
+            },
+            body: JSON.stringify({
+                username,
+                password
+            }) 
+        }).then((res)=>res.json())
+
+        if (result.status === 'ok') {
+					// everythign went fine
+					console.log('Got the token: ', result.data)
+					localStorage.setItem('token', result.data)
+				alert('Success')
+		} else {
+			alert(result.error)
+		}
+    }
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+</html>
